@@ -1,5 +1,35 @@
 import requests
 
+transcript_of_weather_description = {'clear': 'ясно',
+                                     'partly-cloudy': 'малооблачно',
+                                     'cloudy': 'облачно с прояснениями',
+                                     'overcast': 'пасмурно',
+                                     'drizzle': 'морось',
+                                     'light-rain': 'небольшой дождь',
+                                     'rain': 'дождь',
+                                     'moderate-rain': 'умеренно сильный дождь',
+                                     'heavy-rain': 'сильный дождь',
+                                     'continuous-heavy-rain': 'длительный сильный дождь',
+                                     'showers': 'ливень',
+                                     'wet-snow': 'дождь со снегом',
+                                     'light-snow': 'небольшой снег',
+                                     'snow': 'снег',
+                                     'snow-showers': 'снегопад',
+                                     'hail': 'град',
+                                     'thunderstorm': 'гроза',
+                                     'thunderstorm-with-rain': 'дождь с грозой',
+                                     'thunderstorm-with-hail': 'гроза с градом'}
+
+decoding_wind_direction = {'nw': 'северо-западное',
+                           'n': 'северное',
+                           'ne': 'северо-восточное',
+                           'e': 'восточное',
+                           'se': 'юго-восточное',
+                           's': 'южное',
+                           'sw': 'юго-западное',
+                           'w': 'западное',
+                           'с': 'штиль'}
+
 
 def get_weather(city, current=True):
     lat, lon = search_city(city)
@@ -17,14 +47,48 @@ def get_weather(city, current=True):
         return response.reason
     else:
         if current:
-            weather = response.json()
+            weather = get_current_weather(response.json())
         else:
             weather = get_weather_forecast(response.json())
     return weather
 
 
+def get_current_weather(information):
+    weather = {}
+    information = information["fact"]
+    icon = information["icon"]
+    weather["Icon"] = f"https://yastatic.net/weather/i/icons/blueye/color/svg/{icon}.svg"
+    weather['condition'] = transcript_of_weather_description[information["condition"]].capitalize()
+    weather["Температура"] = str(information["temp"]) + " °C"
+    weather["Ощущается как"] = str(information["feels_like"]) + " °C"
+    weather["Скорость ветра"] = str(information["wind_speed"]) + " м/с"
+    weather['Направление ветра'] = decoding_wind_direction[information["wind_dir"]]
+    weather['Давление'] = str(information["pressure_mm"]) + ' мм рт. ст.'
+    weather['Влажность воздуха'] = str(information['humidity']) + '%'
+    return weather
+
+
 def get_weather_forecast(information):
-    pass
+    weather = {}
+    for day in information['forecasts']:
+        forecast_for_day = {}
+        forecast_for_day["forecast"] = {}
+        for hour in day["hours"]:
+            forecast_for_hour = {}
+            icon = hour["icon"]
+            forecast_for_hour["icon"] = f"https://yastatic.net/weather/i/icons/blueye/color/svg/{icon}.svg"
+            forecast_for_hour["condition"] = transcript_of_weather_description[hour['condition']].capitalize()
+            forecast_for_hour["Температура"] = str(hour['temp']) + "°C"
+            forecast_for_hour["Ощущается как"] = str(hour['feels_like']) + "°C"
+            forecast_for_hour["Скорость ветра"] = str(hour['wind_speed']) + " м/с"
+            forecast_for_hour['Направление ветра'] = decoding_wind_direction[hour["wind_dir"]]
+            forecast_for_hour['Давление'] = str(hour["pressure_mm"]) + ' мм рт. ст.'
+            forecast_for_hour['Влажность воздуха'] = str(hour['humidity']) + '%'
+            forecast_for_day["forecast"][int(hour["hour"])] = forecast_for_hour
+        date = '.'.join(day["date"].split('-')[::-1])
+        weather[date] = forecast_for_day
+    return weather
+
 
 
 def search_city(name):

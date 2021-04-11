@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}" />
+    <meta charset="UTF-8">
+    <title>Погода в городе {{city}}</title>
+</head>
+<body>
+<h1>Погода в городе {{city}}</h1>
+{% for item in weather_params%}
+    {% if item=="Icon" %}
+        <img src={{weather_params[item]}} width="25%" height="25%" align="bottom">
+    {% elif item=="condition"%}
+        <h2>{{weather_params['condition']}}</h2>
+    {% else %}
+        <h2>{{item}} - {{weather_params[item]}}</h2>
+    {% endif %}
+{% endfor %}
+<h3><a href="/weather_forecast/{{city}}">Посмотреть прогноз погоды</a></h3>
+</body>
+</html>
