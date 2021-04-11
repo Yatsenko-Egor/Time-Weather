@@ -107,11 +107,11 @@ style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 <table>
         {% for i in range(num_ext // 3) %}
             <tr>
-                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                <td><a href="http://127.0.0.1:8000/{{ ext[i] }}" style='text-decoration: none;'>
                     {{ ext[i] }}({{ ext_d[ext[i]] }})</a></td>
-                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                <td><a href="http://127.0.0.1:8000/{{ ext[i + num_ext // 3] }}" style='text-decoration: none;'>
                     {{ ext[i + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3]] }})</a></td>
-                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                <td><a href="http://127.0.0.1:8000/{{ ext[i + num_ext // 3 + num_ext // 3] }}" style='text-decoration: none;'>
                     {{ ext[i + num_ext // 3 + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3 + num_ext // 3]] }})</a></td>
             </tr>
         {% endfor %}
