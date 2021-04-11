@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+background-image: url(static/img/часы1.jpg);
+background-repeat: no-repeat;
+background-attachment: fixed ;
+background-position: top left;
+background-size: 100% 100%;
+}
+
+a {
+color: #ffff00
+}
+
+caption {
+   caption-side: top;
+   text-align: center;
+   padding: 10px 0;
+   font-size: 35pt;
+}
+
+table {
+   border-collapse: collapse;
+   font-size: 20pt;
+   padding: 30% 50%;
+   margin-left: 12%;
+   margin-top: 15px;
+   width: 85%;
+}
+
+th {
+   width: 30%;
+   }
+
+h1 {
+	font-family: Arial, sans-serif;
+	text-align: center;
+}
+
+h2 {
+	font-family: Arial, sans-serif;
+	text-align: right;
+	position: absolute;
+	top: 3%;
+	left: 82%;
+	font-size: 25pt;
+}
+
+input {
+    width: 180px;
+    height: 25px;
+    position: absolute;
+	top: 15%;
+	left: 79%;
+	background-color: #008cf0;
+}
+
+    </style>
+    <script>
+   function digitalClock() {
+    var date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+      if (hours < 10) hours = "0" + hours;
+      if (minutes < 10) minutes = "0" + minutes;
+      if (seconds < 10) seconds = "0" + seconds;
+        document.getElementById("id_clock").innerHTML = hours + ":" + minutes + ":" + seconds;
+        setTimeout("digitalClock()", 1000);
+   }
+  </script>
+</head>
+<body>
+{% set total = 0 %}
+<h1>Точное время в Москве</h1>
+<script>
+function time() {
+    var now = new Date();
+    var clock = document.getElementById("clock");
+    clock.innerHTML = now.toLocaleTimeString();
+}
+setInterval(time, 1000);
+</script>
+<span id="clock"
+style="padding:50% 41%; font-size:50pt; font-weight:bold;">
+</span>
+<h2>Поиск</h2>
+<input type="text">
+<h1>Города России</h1>
+<table>
+        {% for i in range(num_rus // 3) %}
+            <tr>
+                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i] }}" style='text-decoration: none;'>
+                    {{ rus[i] }}</a></td>
+                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i + num_rus // 3] }}" style='text-decoration: none;'>
+                    {{ rus[i + num_rus // 3] }}</a></td>
+                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i + num_rus // 3 + num_rus // 3] }}" style='text-decoration: none;'>
+                    {{ rus[i + num_rus // 3 + num_rus // 3] }}</a></td>
+            </tr>
+        {% endfor %}
+</table>
+<h1>Города зарубежных стран</h1>
+<table>
+        {% for i in range(num_ext // 3) %}
+            <tr>
+                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                    {{ ext[i] }}({{ ext_d[ext[i]] }})</a></td>
+                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                    {{ ext[i + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3]] }})</a></td>
+                <td><a href="http://127.0.0.1:8000/" style='text-decoration: none;'>
+                    {{ ext[i + num_ext // 3 + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3 + num_ext // 3]] }})</a></td>
+            </tr>
+        {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+</table>
+</body>
+</html>
