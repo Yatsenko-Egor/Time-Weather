@@ -56,9 +56,17 @@ input {
     position: absolute;
 	top: 15%;
 	left: 79%;
-	background-color: #008cf0;
+	background-color: #bbbbbb;
 }
 
+button {
+    width: 180px;
+    height: 25px;
+    position: absolute;
+	top: 20%;
+	left: 79%;
+	background-color: #bbbbbb;
+}
     </style>
     <script>
    function digitalClock() {
@@ -90,6 +98,15 @@ style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 </span>
 <h2>Поиск</h2>
 <input type="text">
+<button type="button" onclick="but()">Поиск</button>
+<script>
+    function but(){
+    let input = document.querySelector('input');
+    var value_input = input.value;
+    console.log(value_input);
+    document.location.href = "http://127.0.0.1:8000/current_weather/{{ value_input }}";
+}
+</script>
 <h1>Города России</h1>
 <table>
         {% for i in range(num_rus // 3) %}
