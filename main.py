@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import sqlite3
 from get_weather import get_weather
+from get_timezone import get_timezone
 
 app = Flask(__name__)
 
@@ -37,8 +38,10 @@ def index():
 
 @app.route('/current_weather/<city>')
 def show_current_weather(city):
+    timezone = get_timezone(city)
     weather_params = get_weather(city)
     params = {}
+    params['timezone'] = timezone
     params["city"] = city
     return render_template("current_weather_page.html", weather_params=weather_params, **params)
 
@@ -46,10 +49,10 @@ def show_current_weather(city):
 @app.route('/weather_forecast/<city>')
 def show_weather_forecast(city):
     weather_forecast = get_weather(city, False)
+    print(weather_forecast)
     params = {}
     params["city"] = city
     return render_template("weather_forecast_page.html", weather_forecast=weather_forecast, **params)
-
 
 @app.errorhandler(500)
 def server_error(error):
@@ -59,6 +62,7 @@ def server_error(error):
 @app.errorhandler(404)
 def error_not_found(error):
     return '<h1 style="text-align: center;">Извините, такая страница не найдена</h1>'
+
 
 
 if __name__ == '__main__':

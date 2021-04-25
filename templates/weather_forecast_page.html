@@ -2,49 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <title>Прогноз погоды в городе{{city}}</title>
+    <style>
+        h1 {
+text-align: center;
+font-size: 200%;
+}
+        .card {
+        width: 50%}
+    </style>
 </head>
 <body>
+<div class="d-flex flex-row">
+    <a href="\"><button type="button" class="btn btn-primary btn-lg">Главная</button></a>
+    <a href="/current_weather/{{city}}"><button type="button" class="btn btn-primary btn-lg" style="margin-left: 6%; width: 25rem">Текущая погода в городе {{city}}</button></a>
+</div>
 <h1>Прогноз погоды в городе {{city}}</h1>
-{% for day in weather_forecast%}
-    <h2>Погода на {{day}}</h2>
+{% for day in weather_forecast %}
     {% set forecast_for_day = weather_forecast[day]['forecast'] %}
+    <h2>Погода на {{day}}</h2>
+    {% for row in range(1, 3) %}
+        {% if row==1 %}
+            {% set min_hour = 0 %}
+            {% set max_hour = 12 %}
+        {% else %}
+            {% set min_hour = 12 %}
+            {% set max_hour = 24 %}
+        {% endif %}
     <div class="card-group">
-        {% for hour in range(12) %}
-            <div class="card">
+        {% for hour in range(min_hour, max_hour) %}
+            <div class="card border-info">
                 <div class="card-body">
                     <h4 class="card-title">{{hour}} ч.</h4>
-                    <img class="card-img-top" src={{forecast_for_day[hour]["icon"]}} alt="Card image cap">
+                    <img class="card-img" src={{forecast_for_day[hour]["icon"]}}>
                     <h5 class="card-text"><small class="text-muted">{{forecast_for_day[hour]["condition"]}}</small></h5>
                     {% for item in forecast_for_day[hour] %}
                         {% if item != "icon" and item != "condition"%}
-                        <h5 class="card-text" style="font-size: 0.9em">{{item}} - {{forecast_for_day[hour][item]}}</h5>
+                        <h5 class="card-text" style="font-size: 0.9em">{{item}}: {{forecast_for_day[hour][item]}}</h5>
                         {% endif %}
                     {% endfor%}
                 </div>
             </div>
         {% endfor %}
     </div>
-    <div class="card-group">
-        {% for hour in range(12, 24) %}
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">{{hour}} ч.</h4>
-                    <img class="card-img-top" src={{forecast_for_day[hour]["icon"]}} alt="Card image cap">
-                    <h5 class="card-text"><small class="text-muted">{{forecast_for_day[hour]["condition"]}}</small></h5>
-                    {% for item in forecast_for_day[hour] %}
-                        {% if item != "icon" and item != "condition"%}
-                        <h5 class="card-text" style="font-size: 0.9em">{{item}} - {{forecast_for_day[hour][item]}}</h5>
-                        {% endif %}
-                    {% endfor%}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{%endfor%}
+    {% endfor %}
+{% endfor %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
