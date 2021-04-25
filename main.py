@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 import sqlite3
 from get_weather import get_weather
-import datetime
 
 app = Flask(__name__)
 
@@ -50,6 +49,16 @@ def show_weather_forecast(city):
     params = {}
     params["city"] = city
     return render_template("weather_forecast_page.html", weather_forecast=weather_forecast, **params)
+
+
+@app.errorhandler(500)
+def www(error):
+    return '<h1 style="text-align: center;">Извините, но такой город не найден</h1>'
+
+
+@app.errorhandler(404)
+def www(error):
+    return '<h1 style="text-align: center;">Извините, такая страница не найдена</h1>'
 
 
 if __name__ == '__main__':
