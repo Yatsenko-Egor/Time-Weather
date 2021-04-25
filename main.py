@@ -52,12 +52,12 @@ def show_weather_forecast(city):
 
 
 @app.errorhandler(500)
-def www(error):
+def server_error(error):
     return '<h1 style="text-align: center;">Извините, но такой город не найден</h1>'
 
 
 @app.errorhandler(404)
-def www(error):
+def error_not_found(error):
     return '<h1 style="text-align: center;">Извините, такая страница не найдена</h1>'
 
 
