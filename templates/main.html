@@ -51,8 +51,8 @@ h2 {
 }
 
 input {
-    width: 180px;
-    height: 25px;
+    width: 170px;
+    height: 20px;
     position: absolute;
 	top: 15%;
 	left: 79%;
@@ -97,25 +97,33 @@ setInterval(time, 1000);
 style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 </span>
 <h2>Поиск</h2>
-<input type="text">
-<button type="button" onclick="but()">Поиск</button>
+<form id="test">
+  <input name="email" id="email" type="text"/>
+  <button name="form_button" type="button" id="form_button">Получить значение</button>
+
+</form>
 <script>
-    function but(){
-    let input = document.querySelector('input');
-    var value_input = input.value;
-    console.log(value_input);
-    document.location.href = "http://127.0.0.1:8000/current_weather/{{ value_input }}";
+function buttonClickHandler(event) {
+  let email_input = document.getElementById("email");
+  let result_span = document.getElementById("result");
+  result_span.textContent = email_input.value;
+  let email_input_value = document.getElementById("email").value;
+  document.location.href = "http://127.0.0.1:8000/current_weather/"+email_input_value;
 }
+
+let button = document.getElementById("form_button");
+button.addEventListener("click", buttonClickHandler);
 </script>
+<span id="result"></span>
 <h1>Города России</h1>
 <table>
         {% for i in range(num_rus // 3) %}
             <tr>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ rus[i] }}" style='text-decoration: none;'>
                     {{ rus[i] }}</a></td>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i + num_rus // 3] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ rus[i + num_rus // 3] }}" style='text-decoration: none;'>
                     {{ rus[i + num_rus // 3] }}</a></td>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ rus[i + num_rus // 3 + num_rus // 3] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ rus[i + num_rus // 3 + num_rus // 3] }}" style='text-decoration: none;'>
                     {{ rus[i + num_rus // 3 + num_rus // 3] }}</a></td>
             </tr>
         {% endfor %}
@@ -124,11 +132,11 @@ style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 <table>
         {% for i in range(num_ext // 3) %}
             <tr>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ ext[i] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ ext[i] }}" style='text-decoration: none;'>
                     {{ ext[i] }}({{ ext_d[ext[i]] }})</a></td>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ ext[i + num_ext // 3] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ ext[i + num_ext // 3] }}" style='text-decoration: none;'>
                     {{ ext[i + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3]] }})</a></td>
-                <td><a href="http://127.0.0.1:8000/current_weather/{{ ext[i + num_ext // 3 + num_ext // 3] }}" style='text-decoration: none;'>
+                <td><a href="/current_weather/{{ ext[i + num_ext // 3 + num_ext // 3] }}" style='text-decoration: none;'>
                     {{ ext[i + num_ext // 3 + num_ext // 3] }}({{ ext_d[ext[i + num_ext // 3 + num_ext // 3]] }})</a></td>
             </tr>
         {% endfor %}
