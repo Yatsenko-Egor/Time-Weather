@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import sqlite3
+import os
 from get_weather import get_weather
 
 app = Flask(__name__)
@@ -65,6 +66,6 @@ def error_not_found(error):
     return render_template("error_file.html", **params)
 
 
-if name == 'main':
+if __name__ == 'main':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
