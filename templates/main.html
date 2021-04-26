@@ -105,16 +105,13 @@ style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 <script>
 function buttonClickHandler(event) {
   let email_input = document.getElementById("email");
-  let result_span = document.getElementById("result");
-  result_span.textContent = email_input.value;
   let email_input_value = document.getElementById("email").value;
-  document.location.href = "http://127.0.0.1:8000/current_weather/"+email_input_value;
+  document.location.href = "/current_weather/"+email_input_value;
 }
 
 let button = document.getElementById("form_button");
 button.addEventListener("click", buttonClickHandler);
 </script>
-<span id="result"></span>
 <h1>Города России</h1>
 <table>
         {% for i in range(num_rus // 3) %}
