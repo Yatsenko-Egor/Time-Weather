@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import sqlite3
 from get_weather import get_weather
 from get_timezone import get_timezone
+import os
 
 app = Flask(__name__)
 
@@ -66,4 +67,5 @@ def error_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(port=8000, host='127.0.0.1')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
