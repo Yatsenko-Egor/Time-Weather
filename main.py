@@ -1,8 +1,6 @@
 from flask import Flask, render_template
 import sqlite3
 from get_weather import get_weather
-from get_timezone import get_timezone
-import os
 
 app = Flask(__name__)
 
@@ -14,7 +12,7 @@ def index():
     ext = []
     ext_d = {}
     param = {}
-    param['title'] = 'Точное время'
+    param['title'] = 'Time'
     con = sqlite3.connect("time_db.sql")
     cur = con.cursor()
     result = cur.execute(f'''SELECT city FROM cities''').fetchall()
@@ -39,10 +37,8 @@ def index():
 
 @app.route('/current_weather/<city>')
 def show_current_weather(city):
-    timezone = get_timezone(city)
     weather_params = get_weather(city)
     params = {}
-    params['timezone'] = timezone
     params["city"] = city
     return render_template("current_weather_page.html", weather_params=weather_params, **params)
 
@@ -50,22 +46,25 @@ def show_current_weather(city):
 @app.route('/weather_forecast/<city>')
 def show_weather_forecast(city):
     weather_forecast = get_weather(city, False)
-    print(weather_forecast)
     params = {}
     params["city"] = city
     return render_template("weather_forecast_page.html", weather_forecast=weather_forecast, **params)
 
+
 @app.errorhandler(500)
 def server_error(error):
-    return '<h1 style="text-align: center;">Извините, но такой город не найден</h1>'
+    params = {}
+    params["text"] = "Извините, но такой город не найден"
+    return render_template("error_file.html", **params)
 
 
 @app.errorhandler(404)
 def error_not_found(error):
-    return '<h1 style="text-align: center;">Извините, такая страница не найдена</h1>'
+    params = {}
+    params["text"] = "Извините, такая страница не найдена"
+    return render_template("error_file.html", **params)
 
 
-
-if __name__ == '__main__':
+if name == 'main':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
