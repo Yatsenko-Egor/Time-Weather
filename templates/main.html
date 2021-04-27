@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <style>
-        body {
-background-image: url(/static/img/clock.jpg);
-background-repeat: no-repeat;
-background-attachment: fixed ;
-background-position: top left;
-background-size: 100% 100%;
+body {
+    background-image: url(/static/img/clock.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed ;
+    background-position: top left;
+    background-size: 100% 100%;
 }
 
 a {
-color: #ffff00
+    color: #ffff00
 }
 
 caption {
@@ -94,13 +94,12 @@ function time() {
 setInterval(time, 1000);
 </script>
 <span id="clock"
-style="padding:50% 41%; font-size:50pt; font-weight:bold;">
+    style="padding:50% 41%; font-size:50pt; font-weight:bold;">
 </span>
 <h2>Поиск</h2>
 <form id="test">
   <input name="email" id="email" type="text"/>
   <button name="form_button" type="button" id="form_button">Получить значение</button>
-
 </form>
 <script>
 function buttonClickHandler(event) {
@@ -108,7 +107,6 @@ function buttonClickHandler(event) {
   let email_input_value = document.getElementById("email").value;
   document.location.href = "/current_weather/"+email_input_value;
 }
-
 let button = document.getElementById("form_button");
 button.addEventListener("click", buttonClickHandler);
 </script>
