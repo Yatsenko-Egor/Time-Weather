@@ -29,19 +29,6 @@
             color: #800000
             }
     </style>
-    <script>
-     function digitalClock() {
-        var date = new Date();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var seconds = date.getSeconds();
-        if (hours < 10) hours = "0" + hours;
-        if (minutes < 10) minutes = "0" + minutes;
-        if (seconds < 10) seconds = "0" + seconds;
-        document.getElementById("id_clock").innerHTML = hours + ":" + minutes + ":" + seconds;
-        setTimeout("digitalClock()", 1000);
-        }
-     </script>
 </head>
 <body>
 <script>
@@ -54,9 +41,9 @@ function time() {
 setInterval(time, 1000);
 </script>
 <a href="\"><button type="button" class="btn btn-primary btn-lg">Главная</button></a>
-<h1 style="margin-right: 3%">Точное время в городе {{city}}</h1>
-<span id="clock" style="padding:50% 41%; font-size:50pt; font-weight:bold;"></span>
-<h1 style="margin-right: 4%">Погода в городе {{city}}</h1>
+<h1 style="margin-left: 2%">Точное время в городе {{city}}</h1>
+<span id="clock" style="display:block; text-align:center; font-size:50pt; font-weight:bold;"></span>
+<h1>Погода в городе {{city}}</h1>
 <div class="card">
   <div class="card-body d-flex flex-row">
       <div class="weather-img">
