@@ -1,7 +1,8 @@
 from flask import Flask, render_template
 import sqlite3
-import os
 from get_weather import get_weather
+from get_timezone import get_timezone
+import os
 
 app = Flask(__name__)
 
@@ -13,7 +14,7 @@ def index():
     ext = []
     ext_d = {}
     param = {}
-    param['title'] = 'Time'
+    param['title'] = 'Точное время'
     con = sqlite3.connect("time_db.sql")
     cur = con.cursor()
     result = cur.execute(f'''SELECT city FROM cities''').fetchall()
@@ -38,8 +39,12 @@ def index():
 
 @app.route('/current_weather/<city>')
 def show_current_weather(city):
+    if not city[0].isupper():
+        city = city.capitalize()
+    timezone = get_timezone(city)
     weather_params = get_weather(city)
     params = {}
+    params['timezone'] = timezone
     params["city"] = city
     return render_template("current_weather_page.html", weather_params=weather_params, **params)
 
