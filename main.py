@@ -44,9 +44,10 @@ def show_current_weather(city):
     timezone = get_timezone(city)
     weather_params = get_weather(city)
     params = {}
+    params['weather_params'] = weather_params
     params['timezone'] = timezone
     params["city"] = city
-    return render_template("current_weather_page.html", weather_params=weather_params, **params)
+    return render_template("current_weather_page.html", **params)
 
 
 @app.route('/weather_forecast/<city>')
