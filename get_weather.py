@@ -61,7 +61,6 @@ def get_weather_forecast(information):
     return weather
 
 
-
 def search_city(name):
     information = geocode(name)
     lat, lon = information["Point"]["pos"].split()[::-1]
