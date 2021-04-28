@@ -80,3 +80,7 @@ def run_telegram_bot():
     dp.add_handler(conversation)
     updater.start_polling()
     updater.idle()
+    
+    
+if __name__=="__main__":
+    run_telegram_bot()
