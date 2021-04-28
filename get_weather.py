@@ -56,6 +56,7 @@ def get_weather_forecast(information):
             forecast_for_hour['Давление'] = str(hour["pressure_mm"]) + ' мм рт. ст.'
             forecast_for_hour['Влажность воздуха'] = str(hour['humidity']) + '%'
             forecast_for_day["forecast"][int(hour["hour"])] = forecast_for_hour
+        forecast_for_day["max_hour"] = len(day["hours"])
         date = '.'.join(day["date"].split('-')[::-1])
         weather[date] = forecast_for_day
     return weather
