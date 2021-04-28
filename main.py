@@ -2,7 +2,6 @@ from flask import Flask, render_template
 import sqlite3
 from get_weather import get_weather
 from get_timezone import get_timezone
-from telegram_bot import run_telegram_bot
 import os
 
 app = Flask(__name__)
