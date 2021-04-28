@@ -81,7 +81,6 @@ def run_telegram_bot():
                 2: [MessageHandler(Filters.text, get_time_inforamtion)]},
         fallbacks=[CommandHandler('stop', stop)])
     dp.add_handler(conversation)
-
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN, webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
