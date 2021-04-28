@@ -4,6 +4,7 @@ from telegram.ext import CommandHandler, MessageHandler, ConversationHandler
 from get_weather import get_weather
 from get_timezone import get_timezone
 from datetime import timedelta, timezone, datetime
+import os
 
 keyboard = [["/time", "/weather"], ['/help']]
 markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True)
@@ -67,6 +68,8 @@ def stop(update, context):
 
 def run_telegram_bot():
     TOKEN = "1740487455:AAGXLm5H-5_QCu5K0-tT_BTulRP9goz7iuc"
+    HEROKU_APP_NAME = "time-weather-telegram-bot"
+    PORT = int(os.environ.get('PORT', 5000))
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
@@ -78,7 +81,10 @@ def run_telegram_bot():
                 2: [MessageHandler(Filters.text, get_time_inforamtion)]},
         fallbacks=[CommandHandler('stop', stop)])
     dp.add_handler(conversation)
-    updater.start_polling()
+
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TOKEN, webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
     updater.idle()
     
     
