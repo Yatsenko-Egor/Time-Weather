@@ -27,10 +27,10 @@
     {% for row in range(1, 3) %}
         {% if row==1 %}
             {% set min_hour = 0 %}
-            {% set max_hour = 12 %}
+            {% set max_hour = weather_forecast[day]['max_hour'] // 2 %}
         {% else %}
-            {% set min_hour = 12 %}
-            {% set max_hour = 24 %}
+            {% set min_hour = weather_forecast[day]['max_hour'] // 2 %}
+            {% set max_hour = weather_forecast[day]['max_hour'] %}
         {% endif %}
     <div class="card-group">
         {% for hour in range(min_hour, max_hour) %}
