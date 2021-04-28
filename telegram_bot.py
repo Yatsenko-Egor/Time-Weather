@@ -1,13 +1,9 @@
-from dotenv import load_dotenv
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import Updater, Filters
 from telegram.ext import CommandHandler, MessageHandler, ConversationHandler
 from get_weather import get_weather
 from get_timezone import get_timezone
 from datetime import timedelta, timezone, datetime
-import os
-
-load_dotenv()
 
 keyboard = [["/time", "/weather"], ['/help']]
 markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True)
@@ -25,26 +21,28 @@ def help(update, context):
 
 
 def start_weather_conversation(update, context):
-    update.message.reply_text("Введите город,в котором вы хотите узнать погоду")
+    update.message.reply_text("Введите город, в котором вы хотите узнать погоду")
     return 1
 
 
 def start_time_conversation(update, context):
-    update.message.reply_text("Введите город,в котором вы хотите узнать время")
+    update.message.reply_text("Введите город, в котором вы хотите узнать время")
     return 2
 
 
 def get_weather_information(update, context):
-    information_about_weather = get_weather(update.message.text)
-    if information_about_weather == None:
+    try:
+        information_about_weather = get_weather(update.message.text)
+    except Exception:
         update.message.reply_text('Извините, такой город не найден', reply_markup=markup)
         return ConversationHandler.END
-    icon = information_about_weather["Icon"]
-    condition = information_about_weather["condition"]
-    context.bot.send_photo(update.message.chat_id, icon, caption=condition)
-    answer = [f"{parameter}: {information_about_weather[parameter]}"
-              for parameter in information_about_weather if parameter not in ["Icon", 'condition']]
-    update.message.reply_text("\n".join(answer), reply_markup=markup)
+    answer = [information_about_weather["condition"]]
+    answer.extend([f"{parameter}: {information_about_weather[parameter]}"
+                   for parameter in information_about_weather if parameter not in ["Icon", 'condition']])
+    update.message.reply_text("\n".join(answer))
+    update.message.reply_text(
+        f"Узнать больше можно на сайте Time-Weather по ссылке https://py-time-weather.herokuapp.com/current_weather/{update.message.text}",
+        reply_markup=markup)
     return ConversationHandler.END
 
 
@@ -56,7 +54,10 @@ def get_time_inforamtion(update, context):
     time_change_in_timezone = timedelta(hours=information_about_timezone)
     timezone_in_city = timezone(time_change_in_timezone)
     time = datetime.now(tz=timezone_in_city).strftime('%H:%M:%S')
-    update.message.reply_text(time, reply_markup=markup)
+    update.message.reply_text(time)
+    update.message.reply_text(
+        f"Узнать больше можно на сайте Time-Weather по ссылке https://py-time-weather.herokuapp.com/current_weather/{update.message.text}",
+        reply_markup=markup)
     return ConversationHandler.END
 
 
@@ -65,7 +66,8 @@ def stop(update, context):
 
 
 def run_telegram_bot():
-    updater = Updater(os.getenv("TOKEN"), use_context=True)
+    TOKEN = "1740487455:AAGXLm5H-5_QCu5K0-tT_BTulRP9goz7iuc"
+    updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
@@ -78,7 +80,3 @@ def run_telegram_bot():
     dp.add_handler(conversation)
     updater.start_polling()
     updater.idle()
-
-
-if __name__ == "__main__":
-    run_telegram_bot()
